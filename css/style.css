@@ -1,0 +1,183 @@
+		@font-face {
+			font-family: SansSerif;
+			src: url(../fonts/Sans_Serif.ttf);
+
+		}
+
+		@font-face {
+			font-family: TimesNewRoman;
+			src: url(../fonts/Times_New_Roman.ttf);
+		}
+
+		@font-face {
+    	font-family: PlumbMedium;
+    	src: url(../fonts/Plumb.ttf);
+		}
+
+		@font-face {
+    	font-family: MODDigitalStripCyrillicBold;
+    	src: url(../fonts/MODDigitalStripCyrillicBold.ttf);
+		}
+
+
+body{
+	min-height: 500px;
+	min-width: 500px;
+	margin: 0;
+	font-family: MODDigitalStripCyrillicBold,PlumbMedium, Verdana, sans-serif, TimesNewRoman;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: #e6fcb6;
+
+}
+
+.startPanelShadow{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position:fixed;
+	width:100%;
+	height:100%;
+	background-color: rgba(0,0,0,0.5);
+	overflow:hidden;
+	left:0;
+	top:0;
+	z-index: 5;
+}
+
+.startPanel{
+	border-radius: 3vh;
+	background-color:white;
+	width:70vh;
+	position: fixed;
+	min-width: 400px;
+	min-height: 300px;
+	box-shadow: 0px 0px 1em #4e1563;;
+
+}
+
+.startPanel__greeting{
+	text-align:center;
+	font-size:1em;
+}
+
+.startPanel__form{
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	justify-content:center;
+}
+
+.startPanel__nameInput{
+	font-family: MODDigitalStripCyrillicBold,PlumbMedium, Verdana, sans-serif, TimesNewRoman;
+	height:2em;
+	text-align:center;
+	font-size: 1.5em;
+	border: 1px solid #4e1563;
+	box-shadow: 0px 0px 0.5em #4e1563;
+	border-radius:3em;
+	outline:none;
+}
+
+.startPanel__nameInput:hover{
+	box-shadow: 0px 0px 1em #4e1563;
+}
+
+.startPanel__nameButton{
+	border-radius:1em;
+	margin:1em 0;
+	padding:0.3em;
+	font-family: MODDigitalStripCyrillicBold,PlumbMedium, Verdana, sans-serif, TimesNewRoman;
+	font-size:2em;
+	text-align:center;
+}
+
+.startPanel__nameButton:hover{
+		box-shadow: 0px 0px 0.5em #4e1563;
+}
+
+.battleGroundBox{
+	display: grid;
+	min-width: 100px;
+	min-height: 100px;
+	grid-template-columns: repeat(12, 1fr);
+	grid-template-rows: repeat(12, 1fr);
+	align-items: center;
+	justify-content: center;
+}
+
+.cell{
+	border: 1px solid black;
+	min-width: 10px;
+	min-height: 10px;
+}
+
+.coord{
+	font-size: 0.7em;
+	text-align: center;
+	min-width: 10px;
+	min-height: 10px;
+}
+
+.startCell{
+	background-color: #00bfff;
+}
+
+.startCell:hover{
+	cursor: url('../cur/cursor.png'), url('../cur/sniper.cur'), crosshair;
+	background-color: blue;
+}
+
+.startShipCell{
+	background-color: green;
+}
+
+.shotEmptyCell{
+	background-color: grey;
+}
+
+.shotShipCell{
+	background-color: red;
+}
+
+.deadShipCell{
+	background-color: black;
+}
+
+.gameField{
+	display: grid;
+	min-width: 500px;
+	width:100vh;
+	grid-template-columns: repeat(2, 1fr);
+}
+
+.battleGroundName{
+	font-size: 1.15em;
+	color: grey;
+	text-align: center;
+}
+
+.helloBlock{
+	margin: 1em 0;
+	font-size: 1.3em;
+	text-align: center;
+	grid-area: 1 / 1 / 2/ 3;
+}
+
+.enemyStat{
+	display: grid;
+	width:100%;
+	grid-template-columns: 3fr 1fr 1fr;
+}
+.statOptionsText{
+	grid-area: 1 / 1 / 2/ 4;
+	margin: 0.5em;
+	font-size: 0.8em;
+	text-align: center;
+}
+.statOptions{
+	margin: 0.2em;
+	font-size: 0.8em;
+	text-align: center;
+}
