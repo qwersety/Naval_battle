@@ -22,25 +22,33 @@ function renderGameField(name, myBG, enemyBG) {
   renderGameField+=myBG;
   renderGameField+=enemyBG;
   renderGameField+=renderGameStat();
-
+  renderGameField+=renderDebagPanel();
   // оборачиваем все в блок
   renderGameField=composer('div', 'gameFieldID', 'gameField', renderGameField);
   return renderGameField;
 }
 
+function renderDebagPanel() {
+  let debagString='';
+  debagString+=composer('p', 'debagCap', 'debagCaptoin', 'Контроль действий:');
+  debagString+=composer('textarea', 'debagArea', 'debagArea', 'Начало игры!');
+  debagString=composer('div', '', '', debagString);
+  return debagString;
+}
+
 function renderGameStat() {
-  let fourDeck=composer('div', '', 'statOptions', 'четырёхпалубныe');
-  let threeDeck=composer('div', '', 'statOptions', 'трёхпалубныe');
-  let twoDeck=composer('div', '', 'statOptions', 'двухпалубныe');
-  let oneDeck=composer('div', '', 'statOptions', 'однапалубныe');
-  let dash=composer('div', '', 'statOptions', '-');
-  let fourDeckStat=composer('div', 'fourDeckStat', 'statOptions', '1');
-  let threeDeckStat=composer('div', 'threeDeckStat', 'statOptions', '2');
-  let twoDeckStat=composer('div', 'twoDeckStat', 'statOptions', '3');
-  let oneDeckStat=composer('div', 'oneDeckStat', 'statOptions', '4');
+  let fourDeck=composer('p', '', 'statOptions', 'четырёхпалубныe');
+  let threeDeck=composer('p', '', 'statOptions', 'трёхпалубныe');
+  let twoDeck=composer('p', '', 'statOptions', 'двухпалубныe');
+  let oneDeck=composer('P', '', 'statOptions', 'однапалубныe');
+  let dash=composer('p', '', 'statOptions', '-');
+  let fourDeckStat=composer('p', 'deckStat-4', 'statOptions', '1');
+  let threeDeckStat=composer('p', 'deckStat-3', 'statOptions', '2');
+  let twoDeckStat=composer('p', 'deckStat-2', 'statOptions', '3');
+  let oneDeckStat=composer('p', 'deckStat-1', 'statOptions', '4');
   let statText='Действующие вражеские корабли:'
   let stringGameStat='';
-  stringGameStat+=composer('div', '', 'statOptionsText', statText);
+  stringGameStat+=composer('p', '', 'statOptionsText', statText);
   stringGameStat+=fourDeck+dash+fourDeckStat+threeDeck+dash+threeDeckStat+twoDeck+dash+twoDeckStat+oneDeck+dash+oneDeckStat;
   stringGameStat=composer('div', 'enemyState', 'enemyStat', stringGameStat);
   return stringGameStat;
