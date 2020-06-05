@@ -1,19 +1,12 @@
+// слушатель нажатия кнопки начало
 document.getElementById('startClick').addEventListener("click", start);
 
+// основная функция, запускает работу функций построения игрового поля
 function start(){
-/*  document.body.innerHTM=`
-    <div id="startPanel" class="startPanelShadow">
-      <div class="startPanel">
-        <p class="startPanel__greeting" >Ты начинаешь увлекательное приключение в роли адмирала флотилии во время великого морского сражения в балтийском море.<br> Для начала боевых действий введи свое имя  и нажми «НАЧАТЬ»!</p>
-        <form id="startForm" name="startForm" class="startPanel__form" method="post">
-          <input id="userName" type="text" autofocus required placeholder="Введите имя" maxlength="15" title="От 1 до 15 символов!" required name="userName" class="startPanel__nameInput">
-          <input id="startClick" type="submit" value="НАЧАТЬ!" class="startPanel__nameButton">
-        </form>
-      </div>
-    </div>`;*/
+  // различные действия (проверка корректности, вывод ошибки, взятие данных) для получения имени игрока
   let form = document.getElementById('startForm');
   let userName = form.userName.value;
-  let corrector=1;
+  let corrector=1; // можно было бы взять булеан значения, но я почему-то тогда захотел так
   let bans=["","<",">","{","}","[","]","`","/","\\","!",".",",","#","~","&","$",":","*","\'","\"","@","^","%"," "," ","  "];
   if (userName=="") corrector=0;
   for (let char of userName){
@@ -28,14 +21,19 @@ function start(){
     }
     if (corrector==0) break;
   }
+  // если коректор прошел все испытания, начинаем новую игру, добаляем на поле объекты
   if (corrector==1) {
     form.onsubmit = newGame(userName);
+    // удаление стартового окна
     document.getElementById('startPanel').remove();
   }
 }
 
+// хоть функция и называется новая игра, в ней по сути сосредоточены все действия по построению и правилам игры
 function newGame(userName) {
+  // таких массивов 2, отслеживают живые корабли компа и игрока
   let myShipsCount=10;
+  // таких массивов 2, несут в себе идентификаторы каждого корабля, отслеживаютт жизни кораблей компа и игрока
   let myShips=[
     [11,13,15,17,21,23,25,31,33,41],
     [1,1,1,1,2,2,2,3,3,4]
@@ -45,7 +43,10 @@ function newGame(userName) {
     [11,13,15,17,21,23,25,31,33,41],
     [1,1,1,1,2,2,2,3,3,4]
   ];
+  // флаг, отлеживает может ли компьютер начать функцию своего хода
   let moveFlag=false;
+
+  // 6 следующих строк. строятся пеменные с боевыми полями на основе массива данных accommodation
   let mySea= accommodation();
   let myBattleGround = new BattleGround(mySea);
   let myBG = myBattleGround.renderMyBG();
@@ -53,8 +54,12 @@ function newGame(userName) {
   let enemySea= accommodation();
   let enemyBattleGround = new BattleGround(enemySea);
   let enemyBG = enemyBattleGround.renderEnemyBG();
+
+  //отправка всех данных на построение готового игрового поля
   document.body.innerHTML+=renderGameField(userName, myBG, enemyBG, enemyShips);
+  // блокировка игрового поля игрока
   document.getElementById("myBG").style.pointerEvents = "none";
+  // обработка хода игрока
   let shipEnemyID='';
   document.getElementById('enemyBG').onclick= function(event) {
     shipEnemyID=myShot(enemySea, event.target.id.slice(10), enemyShips, moveFlag);
@@ -67,7 +72,7 @@ function newGame(userName) {
       alert('Вы выиграли! Начать новыую игру.');
       loseGame(userName);
     }
-
+    // обработка хода компа, он всегда пходит после игрока (не начиает игру первый, хотя можно просто поменять флаг хода компа, можно сделать его рандомным)
     if (shipEnemyID.moveFlag==true){
       let shipMyID='';
       myShipsCount= enemyShot(mySea, myShips, myShipsCount);
@@ -80,17 +85,20 @@ function newGame(userName) {
   }
 }
 
-
+// функция стирания игрового поля
 function loseGame(userName) {
   document.body.innerHTML='';
   newGame(userName);
 }
 
+// функция хода компьютера
 function enemyShot(mySea, myShips, myShipsCount) {
-
+  // массив дял определения буквенных координат
   let liters=['А','Б','В','Г','Д','Е','Ж','З','И','К'];
+  // переменная для проверки ячейки на занятость(если уже бил туда, генерируем новую)
   let attack=false;
   let enemyAttack='';
+  //собственно, сам цикл подбора валидной точки удара, проверяюся параметры цели, ставится мисс пустой или раненный статус(класс)
   while (attack==false) {
     enemyAttack=randomInteger(0,99);
     if (document.getElementById(`myCell-${enemyAttack}`).classList.contains("startCell")==true ||
@@ -114,7 +122,7 @@ function enemyShot(mySea, myShips, myShipsCount) {
           document.getElementById(`myCell-${enemyAttack}`).classList.add("shotEmptyCell");
           attack=true;
         }
-
+        // проверяем на задетость корабля, если да, меняем массив жизней кораблей
         if (mySea[enemyAttack] % 2 == 1) {
           for (let j = 0; j < 10; j++) {
             if (mySea[enemyAttack]==myShips[0][j]){
@@ -124,7 +132,7 @@ function enemyShot(mySea, myShips, myShipsCount) {
           }
           myShips[1][shipID]--;
         }
-
+        // проверка корабля на жизни, если 0, убиваем корабль, выставляем вокуг корабля поля
         if  (myShips[1][shipID]==0){
           debagText(`Враг уничтожил Ваш корабль!`);
           myShipsCount--;
@@ -152,11 +160,12 @@ function enemyShot(mySea, myShips, myShipsCount) {
   }
   return myShipsCount;
 }
+//бот совсем без "мозгов", обработка даных идет только на проверка стрелянных точек.
+//нужно добавить обработчик попадания, при котором следующий удар должен быдет нанестись рядом с попаданием
 
 
 
-
-//функция обработки удара игрока
+// функция обработки удара игрока, очень похожа на ход компа, но без автоподбора точки обстрела, надо бы много собрать в общие функции
 function myShot(enemySea, i, enemyShips, moveFlag) {
   let shipID;
   let liters=['А','Б','В','Г','Д','Е','Ж','З','И','К'];
@@ -217,10 +226,12 @@ function myShot(enemySea, i, enemyShips, moveFlag) {
   } else {
     debagText(`Зона уже атакована!`);
   }
+  // особеность - возврат флага, для разрешения хода компу
   return {shipID:shipID,
           moveFlag:moveFlag};
 }
 
+// функция собирает и приписывает в начало textarea информации боя.
 function debagText(string) {
   let bebagString=`${string}\n${document.getElementById('debagArea').value}`;
   document.getElementById('debagArea').value=bebagString;
