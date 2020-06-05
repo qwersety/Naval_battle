@@ -8,6 +8,8 @@ function accommodation() {
   for (let i=0; i<=99; i++){
       sea[i]="";
   }
+  // заполнение массива идентификаторами кораблей и их окружения
+  // массив поля, кол-во палуб корабля (тип корабля), номер судна для этого типа корабля
   battleship(sea, 4, 1);
   battleship(sea, 3, 1);
   battleship(sea, 3, 2);
@@ -23,11 +25,14 @@ function accommodation() {
 
 //функция предложения расположения корабля
 function shipPlase(sharacter) {
-  // направление постройки катера, где 1-верх, 2-право, 3-низ, 4 -лево
+  // масссив для движения по сетке поля
   let directionSum=[0,-10,1,10,-1]
+  // точка начало построения орабля
   let startPosition=randomInteger(0,99);
+  // направление постройки катера, где 1-верх, 2-право, 3-низ, 4 -лево
   let direction=randomInteger(1,4);
-  /*console.log("direction 1 - "+direction);*/
+  // цикл проверки захода границ окружения корабля за рамки поля (например кончается корабль на 9,
+  //а его окружение уходит на слот 10), тогда меняем выбранное нами направление, по часовой стрелке
   while (startPosition+directionSum[direction]*(sharacter-1)<0 || startPosition+directionSum[direction]*(sharacter-1)>99
   || (Math.trunc((startPosition+directionSum[direction]*(sharacter-1))/10)!=Math.trunc(startPosition/10))&&(direction==4) ||
   (Math.trunc((startPosition+directionSum[direction]*(sharacter-1))/10)!=Math.trunc(startPosition/10))&&(direction==2))
@@ -35,9 +40,6 @@ function shipPlase(sharacter) {
     direction+=1;
     if (direction==5) direction=1;
   }
-/*  console.log("direction 2 - "+direction);
-  console.log("startPosition - "+startPosition);
-  console.log("endPosition - "+(startPosition+directionSum[direction]*3));*/
   return{
         startPosition: startPosition,
         direction: direction,
@@ -45,27 +47,26 @@ function shipPlase(sharacter) {
   };
 }
 
-  // выставление на поле 4 палубное судно и объявление зоны вокруг него
+  // выставление на поле судно и объявление зоны вокруг него
   function battleship(sea, sharacter, number) {
     for (var i = 0; i < 1000; i++) {
-      /*console.log("vvod"+sharacter);*/
       let accept=0;
+      //берем предложенные координаты, направление и итерации перехода по направлению
       let shipPlaseObj= new shipPlase(sharacter);
+      // для удобства переприсваиваем данные в переменные
       let startP = shipPlaseObj.startPosition;
       let iterat= shipPlaseObj.directionSum[shipPlaseObj.direction];
+      // начинаем проверку точек для построения фигуры (должны быть пустые - "")
       for (let i=0; i<sharacter; i++) {
         if (sea[startP+iterat*i]=="") {
           accept+=1;
-          /*console.log(accept+"/"+sharacter);*/
         }
       }
+      // если все точки прошли проверку вбиваем их данные в массив боевой зоны
+      // идет множество проверок на корректность заполнения полей вокруг корабля
       if (accept==sharacter) {
-      /*  console.log("accept");
-        console.log("-----");*/
-
         for (let i=0; i<sharacter; i++) {
           sea[startP+iterat*i]=sharacter*10+number*2-1;
-          /*console.log(startP+iterat*i);*/
         }
 
         if ((((startP-iterat)%10)!=9)&&(shipPlaseObj.direction==2))
@@ -109,10 +110,9 @@ function shipPlase(sharacter) {
           }
         }
         break;
-      } /*console.log("deny");*/
+      }
     }
-
-
+  // возвращаем сформированный массив данных для игровой зоны
   return(sea);
 }
 
